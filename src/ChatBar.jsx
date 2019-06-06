@@ -11,38 +11,22 @@ class Chat extends Component {
         this.onKeyDown = this.onKeyDown.bind(this);
     }
 
-
-
     handleChange(event) {
-        //console.log('handleChange->name', event.target.name)
-        // console.log('handleChange->value', event.target.value)
         this.setState({
             [event.target.name]: event.target.value
         });
-        // console.log(this.state.username)
     }
 
     onKeyDown(event) {
         if (event.key === "Enter") {
-            //console.log('onKeyDown', event.target.value);
-            //note - this passes back to App.js and exec updateMessage - only app updates our data
-            //      it gets the path in the MessageChange={this.updateMessage} in App.js
             this.props.MessageChange(this.state);
-
-            //this clear is broke
-            // console.log(2, event.target.name);
-
-            //this.setState({ content: '' });  //<-TODOthis was working but I broke it
-            // this has content: but no longer works
             this.setState({ [event.target.name]: '' });
         }
 
     }
 
     render() {
-        //let test = {this.props.currentUser.name};
         return (
-            <form>
                 <footer className="chatbar">
                     <input className="chatbar-username"
                         name="username"
@@ -60,7 +44,6 @@ class Chat extends Component {
                         onKeyDown={this.onKeyDown}
                     />
                 </footer>
-            </form>
         );
     }
 }

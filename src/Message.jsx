@@ -5,8 +5,8 @@ class Message extends Component {
         //console.log(`Message.Message`);
         return (
             <div className="message">
-                    <span className="message-username">{this.props.messages.username}</span>
-                    <span className="message-content">{this.props.messages.content}</span>            
+               <span className="message-username">{this.props.username}</span>
+               <span className="message-content">{this.props.content}</span> 
             </div>
         );
     }
