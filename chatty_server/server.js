@@ -23,8 +23,9 @@ wss.on('connection', (ws) => {
     console.log('Client connected');
     ws.on('message', (message) => {
         console.log(`Received message => ${message}`);
-        var data = JSON.parse(message);
-        data.id = uuidv1();
+        
+        let data = JSON.parse(message);
+        data = { id: uuidv1(), ...data };  //spread operator research it
 
         //add the id to message -> uuidv1();
         //broadcast
