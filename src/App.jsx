@@ -9,9 +9,11 @@ class App extends Component {
     super(props);
     this.socket = new WebSocket('ws://localhost:3001/');
     this.state = {
-        currentUser: { name: "Jack" }, // optional. if currentUser is not defined, it means the user is Anonymous
-        messages: []
-      };
+      type: "postMessage",
+      currentUser: { name: "Anonymous" }, // optional. if currentUser is not defined, it means the user is Anonymous
+      messages: []
+      
+    };
 
     this.addMessage = this.addMessage.bind(this);
     this.updateMessage = this.updateMessage.bind(this);
@@ -20,26 +22,47 @@ class App extends Component {
   componentDidMount() {
     //console.log("componentDidMount <App />");
     // this.socket = new WebSocket('ws://localhost:3001/');
-    this.socket.onopen = () => {
-      console.log('Connected to Server');
-    }
 
+    this.socket.onopen = () => {
+      console.log('componentDidMout Client connect to Server');
+    }
+    // this.socket.onmessage = (event) => {
+    //   //console.log(event.data);
+    //   const data = JSON.parse(event.data);
+    //   const messages = this.state.messages.concat(data);
+    //   this.updateMessage(messages);
+    // }
   }
 
-  updateMessage(messages){
+  updateMessage(messages) {
     this.setState({ messages: messages });
   }
 
+
   addMessage(event) {
-    const newContent = event.content;
-    const newMessage = { username: event.username, content: newContent };
+    //console.log(this.state.type);
+    //console.log(this.state.currentUser.name);
+    //console.log(event.username);
+
+    const content = event.content;
+    const username = event.username;
+
+    if (username != this.state.currentUser.name) {
+      const notificationMessage = { type: "postNotification", username: username, currentUser: this.state.currentUser.name };
+      this.socket.send(JSON.stringify(notificationMessage));
+    }
+
+    const newMessage = { type: this.state.type, username: username, content: content };
+
+    // set the current user so that I can track when the user changes
+    this.state.currentUser.name = event.username;
     this.socket.send(JSON.stringify(newMessage));
   }
 
   render() {
     this.socket.onmessage = (event) => {
-      //console.log(event.data);
-      var data = JSON.parse(event.data);
+      const data = JSON.parse(event.data);
+      console.log(data.type);
       const messages = this.state.messages.concat(data);
       this.updateMessage(messages);
     }
