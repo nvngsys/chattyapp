@@ -16,42 +16,40 @@ const server = express()
 // Create the WebSockets server
 const wss = new WebSocket.Server({ server });
 
-// Set up a callback that will run when a client connects to the server
-// When a client connects they are assigned a socket, represented by
-// the ws parameter in the callback.
-wss.on('connection', (ws) => {
-    console.log('Client connected');
-    let numberOfClients = wss.clients.size;
+function updateUserCounts(wss){
+    let numberOfClients = wss.size;
     console.log(numberOfClients);
     const active = {
         type: 'clientcount',
         userCount: numberOfClients
     }
-    //client.send(JSON.stringify(active));
-    wss.clients.forEach(function each(client) {
+
+    wss.forEach(function each(client) {
         if (client.readyState === WebSocket.OPEN) {
             client.send(JSON.stringify(active));
         }
     })
+}
+
+// Set up a callback that will run when a client connects to the server
+// When a client connects they are assigned a socket, represented by
+// the ws parameter in the callback.
+wss.on('connection', (ws) => {
+    console.log('Client connected');
+    
+    updateUserCounts(wss.clients);
+
     ws.on('message', (message) => {
         console.log(` `);
         console.log(`Received message => ${message}`);
 
-        // need to change the type to 
-        // type: "incomingMessage"
         let data = JSON.parse(message);
-        //data.type= "incomingMessage";
         if (data.type === "postNotification") {
             data.type = "incomingNotification";
         } else {
             data.type = "incomingMessage";
         }
         data = { id: uuidv1(), ...data };  //spread operator research it
-
-        //testing
-        let test = JSON.stringify(data)
-        console.log(`Return from server ${test}`);
-        // testing
 
         wss.clients.forEach(function each(client) {
             if (client.readyState === WebSocket.OPEN) {
@@ -62,5 +60,9 @@ wss.on('connection', (ws) => {
     });
 
     // Set up a callback for when a client closes the socket. This usually means they closed their browser.
-    ws.on('close', () => console.log('Client disconnected'));
+    ws.on('close', () => {
+        updateUserCounts(wss.clients);
+        console.log('Client disconnected')
+    });
+
 });

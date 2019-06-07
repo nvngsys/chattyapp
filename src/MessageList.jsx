@@ -4,10 +4,7 @@ import NameChange from './NameChange.jsx';
 
 class List extends Component {
     render() {
-        //console.log(this.props.messages);
         const messages = this.props.messages.map(message => {
-            //console.log("List");
-            //console.log('List' + message.type);
             if (message.type == "incomingNotification") {
                 return <NameChange
                     key={message.id}
@@ -25,8 +22,6 @@ class List extends Component {
                 />
             }
         })
-
-
         return (
             <main className="messages">
                 {messages}
