@@ -18,23 +18,22 @@ Chatty is a single page multi user messaging app.
 Clone the project and create your own git repo.
 
 ```
-git clone git@github.com:lighthouse-labs/react-simple-boilerplate.git
-cd react-simple-boilerplate
-git remote rm origin
-git remote add origin [YOUR NEW REPOSITORY]
-# Manually update your package.json file
+git clone git@github.com:https://github.com/nvngsys/chattyapp.git
 ```
 
 Install the dependencies and start the server.
-
 ```
 npm install
 npm start
 open http://localhost:3000
 ```
+Creation of server:
 
+Create a new folder called chatty_server and within it initialize a new npm project using npm init.
 
+Install an express server:  npm install --save --save-exact express
 
+Install ws to the project:  npm install --save --save-exact ws
 
 ## Getting Started
 
