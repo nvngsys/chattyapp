@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import Chat from './ChatBar.jsx';
 import List from './MessageList.jsx';
 import { generateRandomId } from "./utils";
+//import { connect } from 'tls';
 //jpb remove randomid as it no longer needed
 
 class App extends Component {
@@ -11,8 +12,9 @@ class App extends Component {
     this.state = {
       type: "postMessage",
       currentUser: { name: "Anonymous" }, // optional. if currentUser is not defined, it means the user is Anonymous
-      messages: []
-      
+      messages: [],
+      users: 0
+
     };
 
     this.addMessage = this.addMessage.bind(this);
@@ -22,16 +24,9 @@ class App extends Component {
   componentDidMount() {
     //console.log("componentDidMount <App />");
     // this.socket = new WebSocket('ws://localhost:3001/');
-
     this.socket.onopen = () => {
-      console.log('componentDidMout Client connect to Server');
+      console.log(' Client connect to Server');
     }
-    // this.socket.onmessage = (event) => {
-    //   //console.log(event.data);
-    //   const data = JSON.parse(event.data);
-    //   const messages = this.state.messages.concat(data);
-    //   this.updateMessage(messages);
-    // }
   }
 
   updateMessage(messages) {
@@ -60,16 +55,30 @@ class App extends Component {
   }
 
   render() {
+    //var connectedUsers = 1;
+    const sty = {float: "right", "font-weight": "bold"}
     this.socket.onmessage = (event) => {
+      //console.log(event.data);
       const data = JSON.parse(event.data);
-      console.log(data.type);
-      const messages = this.state.messages.concat(data);
-      this.updateMessage(messages);
+      const dataType = data.type;
+      //console.log(data.type);
+
+      if (dataType == "clientcount") {
+        let connectedUsers = data.userCount;
+        this.setState({ users: connectedUsers })
+        console.log("# of users  " + connectedUsers);
+      } else {
+        const messages = this.state.messages.concat(data);
+        this.updateMessage(messages);
+      }
     }
+    //let style = {float:right}
     return (
+      
       <div>
         <nav className="navbar">
           <a href="/" className="navbar-brand">Chatty</a>
+          <span className = 'navbar-count'>{this.state.users} users online</span>
         </nav>
         <List messages={this.state.messages} />
         <Chat currentUser={this.state.currentUser} MessageChange={this.addMessage} />
