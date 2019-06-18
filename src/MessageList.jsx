@@ -4,6 +4,10 @@ import NameChange from './NameChange.jsx';
 
 class List extends Component {
     render() {
+        //console.log(`MessageList.List`);
+
+        // TODO - check for a message length - if no length return back
+        console.log(this.props.messages);
         const messages = this.props.messages.map(message => {
             if (message.type == "incomingNotification") {
                 return <NameChange
@@ -18,6 +22,7 @@ class List extends Component {
                     type={message.type}
                     username={message.username}
                     content={message.content}
+                    color={message.color}
                 //messages={message}
                 />
             }
