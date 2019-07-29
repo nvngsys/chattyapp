@@ -21,6 +21,8 @@ Chatty is a single page multi user messaging app.
      git@github.com:https://github.com/nvngsys/chattyapp.git
 2. Clone your fork of this repository.
 3. Install dependencies using the `npm install` command.
+   - from main project directory run 'npm install'
+   - cd to chatty_server and run 'npm install'
 4. Start the websocket server 
     - CD to chatty_server in a separate terminal tab
     - Start server using 'npm start' 
@@ -30,8 +32,6 @@ Chatty is a single page multi user messaging app.
     - start web server 'npm start' 
     - Go to <http://localhost:3000/> in your browser.
 
-Jack note  - revisit instuction as I think that you need to run install on both main project and chatty server - review Nimo boilerplate instructions 
-from the final project to see.
 
 ### Dependencies
 
