@@ -46,6 +46,8 @@
     "js-yaml": ">=3.13.1"
   },
   "dependencies": {
+    "lodash": "^4.17.13",
+    "lodash.mergewith": "^4.6.2",
     "react": "15.4.2",
     "react-dom": "15.4.2"
   }
